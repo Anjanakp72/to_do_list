@@ -1,0 +1,26 @@
+<div class="container">
+	<h1> To Do List </h1>
+	<div class="row float-right mb-2">
+		<button type="button" class="btn btn-primary" (click)="createList()"> Create New List</button>
+	</div>
+	<table class="table">
+		<thead>
+			<tr> 
+			<th> Sr. No </th>
+			<th> Title </th>
+			<th> Remarks </th>
+			<th> Status </th>
+			<th> Items </th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let list of listData">
+				<td> {{list.srno}} </td>
+				<td class="hLink" (click)="showdetails(list._id)">  {{list.title}} </td>
+				<td> {{list.remarks}} </td>
+				<td> {{list.status}} </td>
+				<td> {{list.listitems.length}} </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
