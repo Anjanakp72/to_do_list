@@ -1,11 +1,11 @@
 <div class="container">
-<h1> Create New To DO List </h1>
-<div [hidden]="!addNew">
+<h1> Edit To Do List </h1>
+<div [hidden]="updateStatus == false">
 <div class="row float-right mb-2">
    <button type="button" class="btn btn-secondary" (click)="goHome()"> Back to Home</button>
 </div>
 
-<form [formGroup]="createNew">
+<form [formGroup]="editForm">
 <div class="col-xl-8 col-lg-8 col-md-8">
 <div class="form-group">
 <label> Sr No. </label>
@@ -25,17 +25,17 @@
 <div class="form-group">
 <label> Status </label>
 <div class="radio">
-	<label >	<input type="radio" formControlName="status" class="form-control" value="open"> Open </label>
-<label> <input type="radio" formControlName="status" class="form-control" value="closed"> Closed </label>
+	<label >	<input type="radio" formControlName="status" class="form-control" value='open'> Open </label>
+<label> <input type="radio" formControlName="status" class="form-control" value='closed'> Çlosed </label>
 </div>
 </div>
 
-<h3> Add items to the new To Do List </h3>
+<h3> Edit To DO List Items </h3>
 	<div class="row float-right mb-2">
 	<span>	<button type="button" class="btn btn-primary mr-2" (click)="addItem(rowCount)"> Add New</button> </span>
 	</div>
 
-   <div formArrayName="items" *ngFor="let item of createNew.controls.items['controls']; let i = index;">
+   <div formArrayName="items" *ngFor="let item of editForm.controls.items['controls']; let i = index;">
 		<div [formGroupName]="i">
    		<div class="form-group">
    		<label> Item No. {{i + 1}} </label>
@@ -55,7 +55,7 @@
    
    <div class="clearfix"></div>
 	<div class="row float-right mb-2">
-		<button type="button" class="btn btn-primary" (click)="createNewList()"> Submit</button>
+		<button type="button" class="btn btn-primary" (click)="updateList()"> Update</button>
 	</div>
 </div>
 
@@ -63,17 +63,18 @@
    <div class="clearfix"></div>
 </div>   
    <div class="alert alert-danger mb-2" *ngIf="statusMsg"> {{statusMsg}} </div>
-   <ng-container *ngIf="!addNew && listDetailData"> 
+   <ng-container *ngIf="updateStatus == false && updatedList"> 
    <div class="clearfix"></div>   
-   <h3 class="text-secondary"> {{listDetailData.title}} </h3>
+   <h3 class="text-secondary"> {{updatedList.title}} </h3>
    <div class="row mb-2">
       <div class="col-lg-9 col-xl-9 col-md-9 border">
-         <span class="col-lg-1 col-xl-1 col-md-1"> Sr. No : {{listDetailData.srno}} </span>
-         <span class="col-lg-3 col-xl-3 col-md-3"> Remarks: {{listDetailData.remarks}} </span>
-         <span class="col-lg-5 col-xl-5 col-md-5"> Status: {{listDetailData.status}} </span>
+         <span class="col-lg-1 col-xl-1 col-md-1"> Sr. No : {{updatedList.srno}} </span>
+         <span class="col-lg-3 col-xl-3 col-md-3"> Remarks: {{updatedList.remarks}} </span>
+         <span class="col-lg-5 col-xl-5 col-md-5"> Status: {{updatedList.status}} </span>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3">
-      <button type="button" (click)="addMore()" class="btn btn-secondary"> Add New</button>
+      <span class="mr-2"> <button type="button" (click)="createList()" class="btn btn-secondary"> Add New</button> </span>
+      <span class="ml-2"> <button type="button" (click)="goBack()" class="btn btn-secondary"> Home </button> </span>
       </div>
 
    </div>
@@ -87,11 +88,12 @@
       </tr>
    </thead>
    <tbody>
-      <tr *ngFor="let item of listDetailData.items">
+      <tr *ngFor="let item of updatedList.items">
       <td> {{item.listno}} </td>
       <td> {{item.todoCaption}} </td>
       </tr>
    </tbody>
    </table>
    </ng-container>
+
 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, NgForm, FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -11,8 +11,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CreateListComponent implements OnInit {
 	createNew: FormGroup;
 	items: any;
-
-  constructor(private router: Router, httpClient: HttpClient, private formBuilder: FormBuilder) { }
+  postData: any;
+  statusMsg: string;
+  listDetailData: any;
+  addNew: boolean = true;
+  rowCount:number = 1;
+  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
   	this.createNew = this.formBuilder.group({
@@ -20,21 +24,21 @@ export class CreateListComponent implements OnInit {
   		title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
   		remarks: new FormControl('', [Validators.required, Validators.maxLength(30)]),
   		status: new FormControl(false, [Validators.required ]),
-  		items: this.formBuilder.array([this.createListItems()])
+  		items: this.formBuilder.array([this.createListItems(this.rowCount)])
   	})
   }
 
-  createListItems(): FormGroup{    
-
+  createListItems(iCount:number): FormGroup{    
+    this.rowCount++;
     return this.formBuilder.group({      
-      listno: new FormControl('', [Validators.required, Validators.maxLength(4),Validators.pattern(/\d/) ]),
+      listno: new FormControl(iCount, [Validators.required, Validators.maxLength(4),Validators.pattern(/\d/) ]),
       todoCaption: new FormControl('', [Validators.required, Validators.pattern(/[a-z0-9._%+-]$/)]),
     });
   }
 
-  addItem(){
+  addItem(iCount:number){
 	  this.items = this.createNew.get('items') as FormArray;
-	  this.items.push(this.createListItems());            	
+	  this.items.push(this.createListItems(iCount));            	
   }
 
   removeItem(x:number){
@@ -43,6 +47,39 @@ export class CreateListComponent implements OnInit {
   }
   
   createNewList(){
-  	
+    this.postData = this.createNew.value;
+    this.http.post('/api/', this.postData).subscribe(resp => {
+      this.statusMsg = "To Do List added Successfully. " ;
+      this.listDetailData = resp;
+      this.cleanUpForm();
+    }, (err: HttpErrorResponse) => {
+      console.log(err.message);
+    });
   }
+
+  cleanUpForm(){
+      this.createNew.reset();
+      this.items = this.createNew.get('items') as FormArray;
+      let xCount = this.items.length;
+      while(xCount > 0){
+        this.items.removeAt(xCount);
+        xCount--;
+      }
+      this.addNew = false;    
+  }
+
+  addMore(){
+    this.statusMsg = null;
+    this.listDetailData = null;
+    this.addNew = true;
+  }
+
+  goHome(){
+    this.router.navigate(['/todo']);
+  }
+
+
+
+
+
 }

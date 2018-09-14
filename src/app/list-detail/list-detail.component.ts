@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -16,7 +16,6 @@ export class ListDetailComponent implements OnInit {
   ngOnInit() {
   	if(this.route.snapshot.params['id']){
   		this.listId = this.route.snapshot.params['id'];
-  		console.log("list id ", this.listId);
   		this.http.get('/api/' + this.listId).subscribe(data => {
   			this.listDetailData = data;
   		});

@@ -11,13 +11,15 @@ import { environment } from '../environments/environment';
 import { ListComponent } from './list/list.component';
 import { ListDetailComponent } from './list-detail/list-detail.component';
 import { CreateListComponent } from './create-list/create-list.component';
+import { EditDetailComponent } from './edit-detail/edit-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
     ListDetailComponent,
-    CreateListComponent
+    CreateListComponent,
+    EditDetailComponent
   ],
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule,
