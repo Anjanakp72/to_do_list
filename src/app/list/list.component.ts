@@ -31,7 +31,7 @@ export class ListComponent implements OnInit {
   }
 
   createList() {
-    this.router.navigate(['/create-list']);
+    this.router.navigate(['/todo-createnew']);
   }
   deleteList(id){
     this.http.delete('/api/' + id).subscribe(res => {

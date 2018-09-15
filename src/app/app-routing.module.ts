@@ -13,7 +13,7 @@ const routes: Routes = [
 	path: 'todo', component: ListComponent
 },
 {
-	path: 'create-list', component: CreateListComponent
+	path: 'todo-createnew', component: CreateListComponent
 },
 {
 	path: 'todo-detail/:id', component: ListDetailComponent 

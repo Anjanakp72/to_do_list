@@ -25,9 +25,9 @@ export class EditDetailComponent implements OnInit {
   	if(this.route.snapshot.params['id']){  		
   		this.listId = this.route.snapshot.params['id'];
 		  	this.editForm = this.formBuilder.group({
-		  		srno: new FormControl('', [Validators.required, Validators.pattern(/\d{3}/)]),
-		  		title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
-		  		remarks: new FormControl('', [Validators.required, Validators.maxLength(30)]),
+		  		srno: new FormControl('', [Validators.required,Validators.minLength(1),Validators.pattern(/\d/)]),
+		  		title: new FormControl('', [Validators.required,Validators.minLength(3), Validators.maxLength(30)]),
+		  		remarks: new FormControl('', [Validators.maxLength(30)]),
 		  		status: new FormControl('', [Validators.required ]),
 		  		items: this.formBuilder.array([])
 		  	});
@@ -51,9 +51,29 @@ export class EditDetailComponent implements OnInit {
   createListItems(iCount:number): FormGroup{    
     this.rowCount++;
     return this.formBuilder.group({      
-      listno: new FormControl(iCount + 1, [Validators.required, Validators.maxLength(4),Validators.pattern(/\d/) ]),
-      todoCaption: new FormControl('', [Validators.required, Validators.pattern(/[a-z0-9._%+-]$/)]),
+      listno: new FormControl(iCount + 1, [Validators.required, Validators.maxLength(4) ]),
+      todoCaption: new FormControl('', [Validators.required]),
     });
+  }
+
+  cancelEdit(){
+
+      this.editForm.controls.srno.setValue(this.listDetailData['srno']);
+      this.editForm.controls.title.setValue(this.listDetailData['title']);
+      this.editForm.controls.remarks.setValue(this.listDetailData['remarks']);
+      this.editForm.controls.status.setValue(this.listDetailData['status']);
+      this.rowCount = this.listDetailData['items'].length;
+      this.items = this.editForm.get('items') as FormArray;
+ 
+      let x = 0;
+      while(x < this.items.length){
+        this.items.removeAt(x);
+      }      
+
+        for(let lstItem of this.listDetailData['items']){
+        this.items.push(this.populateListItems(lstItem));              
+        }
+
   }
 
   addItem(iCount:number){
@@ -68,8 +88,8 @@ export class EditDetailComponent implements OnInit {
 
   populateListItems(listItem: any): FormGroup{    
     return this.formBuilder.group({      
-      listno: new FormControl(listItem.listno, [Validators.required, Validators.maxLength(4),Validators.pattern(/\d/) ]),
-      todoCaption: new FormControl(listItem.todoCaption, [Validators.required, Validators.pattern(/[a-z0-9._%+-]$/)]),
+      listno: new FormControl(listItem.listno, [Validators.required, Validators.maxLength(4) ]),
+      todoCaption: new FormControl(listItem.todoCaption, [Validators.required]),
     });
   }
 
@@ -92,7 +112,7 @@ export class EditDetailComponent implements OnInit {
     this.router.navigate(['/create-list']);
   }
 
-	goBack(){
+	goHome(){
 		this.router.navigate(['/todo']);
 	}
 }

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormControl, NgForm, FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormControl, NgForm, FormBuilder,FormGroupDirective, Validators, FormGroup, FormArray } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-create-list',
@@ -20,19 +21,19 @@ export class CreateListComponent implements OnInit {
 
   ngOnInit() {
   	this.createNew = this.formBuilder.group({
-  		srno: new FormControl('', [Validators.required, Validators.pattern(/\d{3}/)]),
-  		title: new FormControl('', [Validators.required, Validators.maxLength(30)]),
-  		remarks: new FormControl('', [Validators.required, Validators.maxLength(30)]),
-  		status: new FormControl(false, [Validators.required ]),
+  		srno: new FormControl('', [Validators.required, Validators.minLength(1),Validators.pattern(/\d/)]),
+  		title: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+  		remarks: new FormControl('', [Validators.maxLength(30)]),
+  		status: new FormControl('', [Validators.required ]),
   		items: this.formBuilder.array([this.createListItems(this.rowCount)])
-  	})
+  	});
   }
 
   createListItems(iCount:number): FormGroup{    
     this.rowCount++;
     return this.formBuilder.group({      
       listno: new FormControl(iCount, [Validators.required, Validators.maxLength(4),Validators.pattern(/\d/) ]),
-      todoCaption: new FormControl('', [Validators.required, Validators.pattern(/[a-z0-9._%+-]$/)]),
+      todoCaption: new FormControl('', [Validators.required]),
     });
   }
 
@@ -42,6 +43,7 @@ export class CreateListComponent implements OnInit {
   }
 
   removeItem(x:number){
+    this.rowCount--;    
 	  this.items = this.createNew.get('items') as FormArray;
 	  this.items.removeAt(x);
   }

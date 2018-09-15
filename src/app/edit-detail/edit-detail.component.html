@@ -5,15 +5,15 @@
    <button type="button" class="btn btn-secondary" (click)="goHome()"> Back to Home</button>
 </div>
 
-<form [formGroup]="editForm">
-<div class="col-xl-8 col-lg-8 col-md-8">
+<form [formGroup]="editForm" (ngSubmit)="updateList()" novalidate>
+<div class="col-xl-9 col-lg-9 col-md-9">
 <div class="form-group">
-<label> Sr No. </label>
+<label> Sr No. *</label>
 <input type="text" formControlName="srno" class="form-control">
 </div>
 
 <div class="form-group">
-<label> Title </label>
+<label> Title *</label>
 <input type="text" formControlName="title" class="form-control">
 </div>
 
@@ -22,32 +22,40 @@
 <input type="text" formControlName="remarks" class="form-control">
 </div>
 
-<div class="form-group">
-<label> Status </label>
-<div class="radio">
-	<label >	<input type="radio" formControlName="status" class="form-control" value='open'> Open </label>
-<label> <input type="radio" formControlName="status" class="form-control" value='closed'> Çlosed </label>
+<div class="form-group row">
+<label class="col-sm-2"> Status *</label>
+<div class="col-sm-10">
+   <div class="form-check form-check-inline mr-4">
+      <input type="radio" formControlName="status" id="statusOpen" class="form-check-input radio-inline" value="open"> 
+      <label class="form-check-label" for="statusOpen"> Open </label>
+   </div>
+   <div class="form-check form-check-inline">
+      <input type="radio" formControlName="status" id="statusClosed" class="form-check-input radio-inline" value="closed"> 
+      <label class="form-check-label" for="statusClosed"> Closed </label>
+   </div>
 </div>
+<p> Form validation status : {{editForm.valid}} </p>
 </div>
 
-<h3> Edit To DO List Items </h3>
-	<div class="row float-right mb-2">
-	<span>	<button type="button" class="btn btn-primary mr-2" (click)="addItem(rowCount)"> Add New</button> </span>
-	</div>
-
+<h3> Edit To Do List Items </h3>
    <div formArrayName="items" *ngFor="let item of editForm.controls.items['controls']; let i = index;">
 		<div [formGroupName]="i">
-   		<div class="form-group">
-   		<label> Item No. {{i + 1}} </label>
-   		<input type="text" formControlName="listno" class="form-control">
-   		</div>
-   		<div class="form-group">
-   		<label> To Do Item </label>
-   		<input type="text" formControlName="todoCaption" class="form-control">
-   		</div>
-	<div class="row float-right mb-2" *ngIf="i > 0">
-	<span>  <button type="button" class="btn btn-danger ml-2" (click)="removeItem(i)"> Remove</button> </span>
-	</div>
+             <div class="form-row mt-2 mb-2">
+               <div class="col">
+               <label> Item No. * </label>
+               <input type="text" formControlName="listno" class="form-control">
+               </div>
+   
+               <div class="col">
+               <label> To Do Item *</label>
+               <input type="text" formControlName="todoCaption" class="form-control">
+               </div>
+               <div class="col ">
+                     <span *ngIf="i > 0">  <button type="button" class="btn btn-danger ml-2" (click)="removeItem(i)"> Remove</button> </span> 
+                     <span *ngIf="i == 0"> &nbsp; </span>
+               </div>
+            </div>
+   <div class="clearfix"></div>
 
    		</div>
       </div>
@@ -55,7 +63,9 @@
    
    <div class="clearfix"></div>
 	<div class="row float-right mb-2">
-		<button type="button" class="btn btn-primary" (click)="updateList()"> Update</button>
+      <button type="button" class="btn btn-primary mr-2" (click)="addItem(rowCount)"> Add New Item</button> 
+		<button type="submit" class="btn btn-primary mr-2" [disabled]="!editForm.valid" > Update </button>
+      <button type="button" class="btn btn-secondary" (click)="cancelEdit()" > Cancel </button>
 	</div>
 </div>
 
@@ -74,7 +84,7 @@
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3">
       <span class="mr-2"> <button type="button" (click)="createList()" class="btn btn-secondary"> Add New</button> </span>
-      <span class="ml-2"> <button type="button" (click)="goBack()" class="btn btn-secondary"> Home </button> </span>
+      <span class="ml-2"> <button type="button" (click)="goHome()" class="btn btn-secondary"> Home </button> </span>
       </div>
 
    </div>
