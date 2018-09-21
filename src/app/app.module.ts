@@ -8,10 +8,19 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AppComponent } from './app.component';
 
 import { environment } from '../environments/environment';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
+import { HomeComponent } from './home/home.component';
+
 import { ListComponent } from './list/list.component';
 import { ListDetailComponent } from './list-detail/list-detail.component';
 import { CreateListComponent } from './create-list/create-list.component';
 import { EditDetailComponent } from './edit-detail/edit-detail.component';
+
+import { AuthenticationService } from './authentication.service';
+import { AuthGuardService } from './auth-guard.service';
+
 
 @NgModule({
   declarations: [
@@ -19,14 +28,18 @@ import { EditDetailComponent } from './edit-detail/edit-detail.component';
     ListComponent,
     ListDetailComponent,
     CreateListComponent,
-    EditDetailComponent
+    EditDetailComponent,
+    RegisterComponent,
+    LoginComponent,
+    ProfileComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule,
     AppRoutingModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [],
+  providers: [AuthenticationService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

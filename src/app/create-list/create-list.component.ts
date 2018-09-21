@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, NgForm, FormBuilder,FormGroupDirective, Validators, FormGroup, FormArray } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { AuthenticationService, UserDetails } from '../authentication.service';
 
 @Component({
   selector: 'app-create-list',
@@ -17,7 +17,7 @@ export class CreateListComponent implements OnInit {
   listDetailData: any;
   addNew: boolean = true;
   rowCount:number = 1;
-  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private auth: AuthenticationService) { }
 
   ngOnInit() {
   	this.createNew = this.formBuilder.group({
@@ -50,7 +50,7 @@ export class CreateListComponent implements OnInit {
   
   createNewList(){
     this.postData = this.createNew.value;
-    this.http.post('/api/', this.postData).subscribe(resp => {
+    this.auth.createlist(this.postData).subscribe(resp => {    
       this.statusMsg = "To Do List added Successfully. " ;
       this.listDetailData = resp;
       this.cleanUpForm();
@@ -79,9 +79,5 @@ export class CreateListComponent implements OnInit {
   goHome(){
     this.router.navigate(['/todo']);
   }
-
-
-
-
 
 }

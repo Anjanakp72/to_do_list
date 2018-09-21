@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService, UserDetails } from '../authentication.service';
 
 @Component({
   selector: 'app-list',
@@ -10,14 +11,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ListComponent implements OnInit {
 	listData: any;
   statusMsg: string;
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private auth: AuthenticationService) { }
 
   ngOnInit() {
     this.getListData();
   }
-  
+
   getListData(){
-    this.http.get('/api/').subscribe(data => {
+    this.auth.getalltodolists().subscribe(data => {
       this.listData = data;
     });
   }
@@ -34,7 +35,7 @@ export class ListComponent implements OnInit {
     this.router.navigate(['/todo-createnew']);
   }
   deleteList(id){
-    this.http.delete('/api/' + id).subscribe(res => {
+    this.auth.deletelist(id).subscribe(data => {
       this.statusMsg = "To Do List Deleted Successfully";
       this.getListData();
     }, (err: HttpErrorResponse)=> {

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var TodoList = require('../models/TodoList.js');
+var User = require('../models/User.js');
 
 /* Get home page */
 // router.get('/', function(req,res,next){
@@ -10,7 +10,7 @@ var TodoList = require('../models/TodoList.js');
 
 /*  GET ALL TO DO LISTS */
 router.get('/', function(req,res,next){
-	TodoList.find( function(err, lists){
+	User.find( function(err, lists){
 		if(err) return next(err);
 		res.json(lists);
 	});
@@ -18,7 +18,7 @@ router.get('/', function(req,res,next){
 
 /* GET A PARTICULAR LIST BY ID */
 router.get('/:id', function(req, res,next){
-	TodoList.findById(req.params.id, function(err, post){
+	User.findById(req.params.id, function(err, post){
 		if(err) return next(err);
 		res.json(post);
 	});
@@ -27,7 +27,7 @@ router.get('/:id', function(req, res,next){
 //curl -i -X POST -H "Content-Type: application/json" -d '{ "srno":"1","title":"ToDo List 1","remarks": "First To Do List by Ashish","status":true }' localhost:3000/todolist
 /* ADD A NEW LIST */
 router.post('/', function(req,res,next) {
-	TodoList.create(req.body, function(err, post){
+	User.create(req.body, function(err, post){
 		if(err) return next(err);
 		res.json(post);
 	});
@@ -35,7 +35,7 @@ router.post('/', function(req,res,next) {
 
 /* UPDATE A LIST */
 router.put('/:id', function(req, res, next){
-	TodoList.findByIdAndUpdate(req.params.id, req.body, function(err, post) {
+	User.findByIdAndUpdate(req.params.id, req.body, function(err, post) {
 		if(err) return next(err);
 		res.json(post);
 	});
@@ -43,7 +43,7 @@ router.put('/:id', function(req, res, next){
 
 /* UPDATE A LIST */
 router.delete('/:id', function(req, res, next){
-	TodoList.findByIdAndRemove(req.params.id, req.body, function(err, post) {
+	User.findByIdAndRemove(req.params.id, req.body, function(err, post) {
 		if(err) return next(err);
 		res.json(post);
 	});

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, NgForm, FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService, UserDetails } from '../authentication.service';
 
 @Component({
   selector: 'app-edit-detail',
@@ -19,7 +20,7 @@ export class EditDetailComponent implements OnInit {
   	statusMsg: string;
   	updateStatus: boolean = true;
 
-  constructor(private route: ActivatedRoute, private router:Router, private formBuilder: FormBuilder,  private http: HttpClient) { }
+  constructor(private route: ActivatedRoute, private router:Router, private formBuilder: FormBuilder,  private http: HttpClient, private auth: AuthenticationService) { }
 
   ngOnInit() {
   	if(this.route.snapshot.params['id']){  		
@@ -31,8 +32,9 @@ export class EditDetailComponent implements OnInit {
 		  		status: new FormControl('', [Validators.required ]),
 		  		items: this.formBuilder.array([])
 		  	});
+      // this.http.get('/api/' + this.listId).subscribe(data => {
 
-  		this.http.get('/api/' + this.listId).subscribe(data => {
+  		this.auth.getlistdetail(this.listId).subscribe(data => {
   			this.listDetailData = data;
 			this.editForm.controls.srno.setValue(this.listDetailData['srno']);
 			this.editForm.controls.title.setValue(this.listDetailData['title']);
@@ -95,12 +97,11 @@ export class EditDetailComponent implements OnInit {
 
   updateList(){
     this.postData = this.editForm.value;
-    this.http.put('/api/' + this.listId, this.postData).subscribe(resp => {
+    this.auth.updatelist(this.listId, this.postData).subscribe(resp => {
       this.statusMsg = "To Do List Updated Successfully. " ;
-  		this.http.get('/api/' + this.listId).subscribe(data => {
+  		this.auth.getlistdetail(this.listId).subscribe(data => {
   			this.updatedList = data;
   		});
-      console.log(this.updatedList);
       this.updateStatus = false;    
     }, (err: HttpErrorResponse) => {
       console.log(err.message);

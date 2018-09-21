@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService, UserDetails } from '../authentication.service';
 
 @Component({
   selector: 'app-list-detail',
@@ -11,14 +12,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ListDetailComponent implements OnInit {
 	listDetailData = {};
 	listId: any;
-  constructor(private route: ActivatedRoute, private router:Router, private http: HttpClient) { }
+  constructor(private route: ActivatedRoute, private router:Router, private http: HttpClient, private auth: AuthenticationService) { }
 
   ngOnInit() {
   	if(this.route.snapshot.params['id']){
   		this.listId = this.route.snapshot.params['id'];
-  		this.http.get('/api/' + this.listId).subscribe(data => {
-  			this.listDetailData = data;
-  		});
+      this.auth.getlistdetail(this.listId).subscribe(data => {
+        this.listDetailData = data;
+      });
+
+  		// this.http.get('/api/' + this.listId).subscribe(data => {
+  		// 	this.listDetailData = data;
+  		// });
   	}
   }
 
