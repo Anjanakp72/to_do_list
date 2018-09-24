@@ -14,7 +14,7 @@ export class EditDetailComponent implements OnInit {
 	listDetailData = {};
 	updatedList = {}; 
 	items:any;
-	listId: any;
+	listId: any = 0;
 	postData:any;
   	rowCount:number = 1;	
   	statusMsg: string;
@@ -110,10 +110,10 @@ export class EditDetailComponent implements OnInit {
 
 
   createList() {
-    this.router.navigate(['/create-list']);
+    //this.router.navigate(['/create-list']);
   }
 
 	goHome(){
-		this.router.navigate(['/todo']);
+		//this.router.navigate(['/todo']);
 	}
 }
