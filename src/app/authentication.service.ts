@@ -22,9 +22,13 @@ export interface TokenPayload {
 	name?: string;
 }
 
+export interface todolistDetail {
+
+}
 @Injectable()
 export class AuthenticationService {
 	private token: string;
+	
 
   constructor( private http: HttpClient, private router: Router) { }
 
@@ -101,11 +105,12 @@ public profile(): Observable<any> {
 }
 
 public getalltodolists(): Observable<any> {
-	return this.request('get', 'getalltodolists');
+	//return this.request('get', 'getalltodolists');
+	return this.http.get<todolistDetail>('/api/getalltodolists/', { headers: { Authorization: `Bearer ${this.getToken()}` }});
 }
 
-public getlistdetail(listId): Observable<any> {
-	return this.http.get('/api/getlistdetail/'+listId, { headers: { Authorization: `Bearer ${this.getToken()}` }});
+public getlistdetail(listId): Observable<todolistDetail> {
+	return this.http.get<todolistDetail>('/api/getlistdetail/'+listId, { headers: { Authorization: `Bearer ${this.getToken()}` }});
 
 }
 

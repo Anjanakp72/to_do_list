@@ -32,7 +32,6 @@ export class EditDetailComponent implements OnInit {
 		  		status: new FormControl('', [Validators.required ]),
 		  		items: this.formBuilder.array([])
 		  	});
-      // this.http.get('/api/' + this.listId).subscribe(data => {
 
   		this.auth.getlistdetail(this.listId).subscribe(data => {
   			this.listDetailData = data;
@@ -40,12 +39,19 @@ export class EditDetailComponent implements OnInit {
 			this.editForm.controls.title.setValue(this.listDetailData['title']);
 			this.editForm.controls.remarks.setValue(this.listDetailData['remarks']);
 			this.editForm.controls.status.setValue(this.listDetailData['status']);
-			this.rowCount = this.listDetailData['items'].length;
+      if(this.listDetailData['items'] && this.listDetailData['items'].length)
+      {
+        this.rowCount = this.listDetailData['items'].length;  
+        for(let lstItem of this.listDetailData['items']){
+        this.items = this.editForm.get('items') as FormArray;
+        this.items.push(this.populateListItems(lstItem));              
+        }
+        
+      }else{
+        this.rowCount = 0;
+      }
+			
 
-		  	for(let lstItem of this.listDetailData['items']){
-			  this.items = this.editForm.get('items') as FormArray;
-			  this.items.push(this.populateListItems(lstItem));            	
-		  	}
   		});
   	}
   }
