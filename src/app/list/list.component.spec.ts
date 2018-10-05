@@ -8,6 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService, UserDetails } from '../authentication.service';
 import { Observable  } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/empty';
+import 'rxjs/add/observable/throw';
 
 const dummyListData = [{"_id":"5b9ba23d70b351083e4e4818","srno":4,"title":"Sprint 3A","remarks":"sprint plan",
 "status":"open","items":[{"_id":"5ba517a72ebc5a0e20be9c24","listno":1,"todoCaption":"Hello World"}],
@@ -62,16 +65,17 @@ describe('ListComponent', () => {
     fixture.detectChanges();
   });
 
-  // it('should load list component', () => {
-  //   expect(component).toBeTruthy();
-  // });
 
   describe('#ngOnInit', () => {
     it('should load todo list details', ()  => {
       let listData: any = dummyListData;            
-      //component.ngOnInit();      
-      listData = component.listData;
-      expect(listData.length).toBe(3);
+
+      spyOn(auth,'getalltodolists').and.callFake(()=> {
+        return Observable.from([listData]);
+      });
+
+      component.ngOnInit();            
+      expect(component.listData).toEqual(listData);      
     });
   });
 

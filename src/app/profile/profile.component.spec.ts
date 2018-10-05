@@ -51,11 +51,16 @@ describe('ProfileComponent', () => {
   });
   
   describe('#ngOnInit', () => {
-    it('should load todo list details', ()  => {
-      let details: any = dummyProfileData;            
-      //component.ngOnInit();      
+    it('should load profile data', ()  => {
+      let details: any = dummyProfileData;    
+
+      spyOn(auth,'profile').and.callFake(()=> {
+        return Observable.from([details]);
+      });
+
+      component.ngOnInit();      
       details = component.details;
-      expect(details.length).toBe(1);
+      expect(component.details).toEqual(details);
     });
   });
 
